@@ -47,7 +47,7 @@ public class Utils {
         if (file.delete()) {
             Log.info("File delete");
         } else {
-            Log.error("Error file not delete");
+            Log.info("File not delete");
         }
     }
 

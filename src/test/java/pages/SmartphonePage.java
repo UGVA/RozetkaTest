@@ -4,12 +4,18 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import entity.Smartphone;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.LinkedList;
 
+import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static helpers.Utils.writeToFile;
 
 public class SmartphonePage {
@@ -54,6 +60,17 @@ public class SmartphonePage {
 
     public static void openPage(int numberPage) {
         $(By.id("page" + numberPage)).click();
+        $(By.xpath("//div[@name='preloader']")).should(disappear);
+
+        WebDriverWait wait = new WebDriverWait(getWebDriver(), 30);
+
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver wdriver) {
+                return ((JavascriptExecutor) getWebDriver()).executeScript(
+                        "return document.readyState"
+                ).equals("complete");
+            }
+        });
     }
 
     public static ElementsCollection getSmartphoneFromPage() {
